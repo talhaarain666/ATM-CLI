@@ -20,15 +20,49 @@ if (answer.pin === myPin) {
         }
     ]);
     if (operations.operation === "cash withdraw") {
-        let amountAns = await inquirer.prompt([
+        let transacMethod = await inquirer.prompt([
             {
-                name: "amount",
-                type: "number",
-                message: "Enter your amount",
+                name: "transMethod",
+                type: "list",
+                message: "Please select option",
+                choices: ["cash withdraw", "fast cash"]
             }
         ]);
-        balance -= amountAns.amount;
-        console.log(`Your remaining balance is  ${balance}`);
+        if (transacMethod.transMethod === 'cash withdraw') {
+            let amountAns = await inquirer.prompt([
+                {
+                    name: "amount",
+                    type: "number",
+                    message: "Enter your amount",
+                }
+            ]);
+            if (balance >= amountAns.amount) {
+                balance -= amountAns.amount;
+                console.log(`Your remaining balance is  ${balance}`);
+            }
+            else {
+                console.log("Insufficient Balance");
+                console.log(`Your balance is only ${balance}`);
+            }
+        }
+        else {
+            let fastCashAmount = await inquirer.prompt([
+                {
+                    name: "fastCashAm",
+                    type: "list",
+                    choices: ['1000', '3000', '5000', '10000', '20000'],
+                    message: "Select the amount to withdraw",
+                }
+            ]);
+            if (balance >= fastCashAmount.fastCashAm) {
+                balance -= fastCashAmount.fastCashAm;
+                console.log(`Your remaining balance is  ${balance}`);
+            }
+            else {
+                console.log("Insufficient Balance");
+                console.log(`Your balance is only ${balance}`);
+            }
+        }
     }
     else if (operations.operation === "check balance") {
         console.log(`Your balance is  ${balance}`);
